@@ -4,6 +4,7 @@
 #include<LiquidCrystal.h>                                     //Required for the LCD Display
 #define ChipAddress 80                                        //Chip Address of the ROM retreived from the datasheet of 24LC128
 
+float attenuator = 20;
 
 int dip_switch(int a,int b)
 {
@@ -69,14 +70,15 @@ void loop() {
     x=pgm_read_float_near( power[num] + l );
     
     // now x gives the power in Dbm
+    x=x+attenuator;
     float k = x/10;
-    float p = pow(10,k)*1000;                                      // formula for converting power in Dbm to uW , where in Power in uW is stored in variable p
+    float p = pow(10,k);                                      // formula for converting power in Dbm to uW , where in Power in uW is stored in variable p
     while(1)
     { 
       lcd.setCursor(0, 1);
       lcd.print("Power:");
       lcd.print(p,2);                                             //displaying the power alternatively in Dbm and uW
-      lcd.print("uW");
+      lcd.print("mW");
       _delay_ms(700);
       lcd.setCursor(0, 1);
       lcd.print("Power:");
